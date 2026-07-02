@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# builds
+dist/
+build/
+.next/
+out/
+
+# env
+.env
+.env*.local
+*.env
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# coverage
+coverage/
+.nyc_output/
+
+# misc
+.DS_Store
+.vscode/
+.idea/
+*.tsbuildinfo
