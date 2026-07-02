@@ -1,4 +1,5 @@
-
+// Builds a random JSON payload for each ping.
+// Varied shape and size give the Option B features realistic data to work with.
 
 const EVENT_TYPES = ['page_view', 'click', 'purchase', 'signup', 'error', 'search'] as const;
 const REGIONS = ['us-east', 'us-west', 'eu-central', 'ap-south', 'sa-east'] as const;
@@ -29,6 +30,7 @@ export interface MonitoringPayload {
 }
 
 export function generatePayload(): MonitoringPayload {
+  // Pick one to three random tags from the pool.
   const tagPool = ['beta', 'mobile', 'desktop', 'cached', 'retry', 'priority'];
   const shuffled = [...tagPool].sort(() => Math.random() - 0.5);
 

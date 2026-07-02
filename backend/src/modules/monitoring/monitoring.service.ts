@@ -7,6 +7,7 @@ import { createIncident } from '../incidents/incident.service';
 import { generatePayload } from './payload.util';
 import { getRollingStats, isAnomalous } from './stats.service';
 
+// Trim stored response bodies to keep documents small.
 const MAX_BODY_BYTES = 8_000;
 
 function byteLength(value: unknown): number {
@@ -17,6 +18,13 @@ function byteLength(value: unknown): number {
   }
 }
 
+// Run one monitoring cycle:
+//   1. Send a random payload to the target and time the round trip.
+//   2. Compare the time against rolling stats to flag anomalies.
+//   3. Save the sample.
+//   4. Broadcast the sample to clients.
+//   5. Open an incident when the sample looks abnormal.
+// Always resolves, so a single failed request never stops the scheduler.
 export async function runMonitoringCycle(): Promise<ResponseDocument | null> {
   const url = env.monitor.targetUrl;
   const payload = generatePayload();
@@ -31,6 +39,7 @@ export async function runMonitoringCycle(): Promise<ResponseDocument | null> {
     const res = await axios.post(url, payload, {
       timeout: 30_000,
       headers: { 'Content-Type': 'application/json' },
+      // Treat any HTTP status as a completed request.
       validateStatus: () => true,
     });
     statusCode = res.status;
@@ -46,11 +55,13 @@ export async function runMonitoringCycle(): Promise<ResponseDocument | null> {
 
   const responseTimeMs = Date.now() - startedAt;
 
+  // Replace oversized bodies with a small marker before saving.
   let storedBody = responseBody;
   if (byteLength(responseBody) > MAX_BODY_BYTES) {
     storedBody = { _truncated: true, note: 'Response body exceeded storage limit' };
   }
 
+  // Check the anomaly rules against the rolling window. Only successful pings qualify.
   const stats = await getRollingStats();
   const anomaly = success && isAnomalous(responseTimeMs, stats, env.anomalyFactor);
 
@@ -73,7 +84,7 @@ export async function runMonitoringCycle(): Promise<ResponseDocument | null> {
   eventBus.emit('response:new', doc);
 
   if (anomaly) {
-
+    // Fire and forget. Incident creation never blocks or breaks the cycle.
     createIncident(doc, stats).catch((err) =>
       logger.error({ err }, 'Failed to create incident'),
     );

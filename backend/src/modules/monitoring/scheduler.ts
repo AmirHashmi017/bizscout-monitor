@@ -5,6 +5,7 @@ import { runMonitoringCycle } from './monitoring.service';
 let timer: NodeJS.Timeout | null = null;
 let running = false;
 
+// Guarded runner. Skips a tick when the previous cycle is still in flight.
 async function tick(): Promise<void> {
   if (running) {
     logger.warn('Previous monitoring cycle still running; skipping this tick');
@@ -20,6 +21,8 @@ async function tick(): Promise<void> {
   }
 }
 
+// Start the periodic monitor. Runs every MONITOR_INTERVAL_MS (default 5 minutes).
+// An optional immediate run fills the dashboard without waiting a full interval.
 export function startScheduler(): void {
   if (timer) return;
 

@@ -1,5 +1,8 @@
 import { computeStats, zScore, isAnomalous } from './stats.service';
 
+// Core component tests: the anomaly detection stats.
+// Everything downstream (flags, incidents, alerts) depends on these being right.
+// Pure functions, so the full decision surface stays easy to cover.
 describe('computeStats', () => {
   it('returns zeros for an empty sample', () => {
     expect(computeStats([])).toEqual({
@@ -13,8 +16,8 @@ describe('computeStats', () => {
   });
 
   it('computes mean, stdDev, min, max for a known set', () => {
+    // Textbook set: mean 5, population stdDev 2.
     const stats = computeStats([2, 4, 4, 4, 5, 5, 7, 9]);
-
     expect(stats.mean).toBe(5);
     expect(stats.stdDev).toBe(2);
     expect(stats.min).toBe(2);
@@ -69,17 +72,17 @@ describe('isAnomalous', () => {
   });
 
   it('flags via the ratio rule when responseTime > factor * mean', () => {
-
+    // factor 2, mean 100, so threshold 200.
     expect(isAnomalous(201, stats, 2)).toBe(true);
   });
 
   it('does not flag a value below both thresholds', () => {
-
+    // 120: below the 200 ratio, and z = 2, below the z-score cutoff of 3.
     expect(isAnomalous(120, stats, 2)).toBe(false);
   });
 
   it('flags via the z-score rule even when under the ratio threshold', () => {
-
+    // 150: below the 200 ratio, but z = 5, above the cutoff of 3.
     expect(isAnomalous(150, stats, 2)).toBe(true);
   });
 
