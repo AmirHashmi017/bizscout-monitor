@@ -7,6 +7,9 @@ import { estimateTokens } from '../llm/pricing';
 import { buildQueryContext } from './chat.context';
 import type { ChatResult } from './chat.dto';
 
+// Natural language query interface (Option B requirement 1).
+// Pipeline: cache check, availability check, build grounded context, call Gemini, cache.
+// Exercises every cost guardrail from requirement 4.
 const answerCache = new TtlCache<string>(env.llm.cacheTtlMs);
 
 const SYSTEM_PROMPT = `You are a monitoring analyst assistant for an HTTP uptime dashboard.
@@ -17,12 +20,14 @@ If the context doesn't contain the answer, say so plainly.`;
 export async function answerQuestion(question: string): Promise<ChatResult> {
   const key = cacheKey(question);
 
+  // 1. Cache check avoids spending quota on repeated questions.
   const cached = answerCache.get(key);
   if (cached !== undefined) {
     costTracker.recordCacheHit();
     return { answer: cached, source: 'cache', remainingCalls: rateLimiter.remaining() };
   }
 
+  // 2. Availability and quota guards with a friendly fallback.
   const blocked = checkAvailability();
   if (blocked === 'disabled') {
     return {
@@ -44,7 +49,7 @@ export async function answerQuestion(question: string): Promise<ChatResult> {
     };
   }
 
-  // 3. Build grounded context and estimate tokens before the call (cost preview).
+  // 3. Build the grounded context and preview the input token count.
   const context = await buildQueryContext();
   const userMessage = `Monitoring data context:\n${context}\n\nQuestion: ${question}`;
   const estimatedInputTokens = estimateTokens(SYSTEM_PROMPT + userMessage);

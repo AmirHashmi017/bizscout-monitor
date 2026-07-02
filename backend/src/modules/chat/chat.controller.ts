@@ -5,6 +5,7 @@ import { answerQuestion } from './chat.service';
 import { costTracker } from '../llm/cost-tracker';
 import { rateLimiter, isLlmEnabled } from '../llm/llm.client';
 
+// POST /api/chat. Natural language query interface (Option B requirement 1).
 export async function chatHandler(req: Request, res: Response): Promise<Response> {
   const parsed = chatBodySchema.safeParse(req.body);
   if (!parsed.success) {
@@ -14,6 +15,7 @@ export async function chatHandler(req: Request, res: Response): Promise<Response
   return res.json(result);
 }
 
+// GET /api/chat/cost. Cost and quota snapshot for the dashboard badge.
 export function costHandler(_req: Request, res: Response): Response {
   return res.json({
     enabled: isLlmEnabled(),

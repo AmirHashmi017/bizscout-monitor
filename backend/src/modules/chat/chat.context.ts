@@ -2,6 +2,9 @@ import { ResponseModel } from '../responses/response.model';
 import { IncidentModel } from '../incidents/incident.model';
 import { computeStats } from '../monitoring/stats.service';
 
+// Build a compact factual snapshot of recent data for the LLM to reason over.
+// Design choice: pre aggregate the data the model needs instead of letting the
+// model write raw MongoDB queries. Safer and lower cost.
 export async function buildQueryContext(windowMs = 24 * 60 * 60 * 1000): Promise<string> {
   const since = new Date(Date.now() - windowMs);
 
@@ -27,7 +30,7 @@ export async function buildQueryContext(windowMs = 24 * 60 * 60 * 1000): Promise
   const lines: string[] = [
     `Window: last ${Math.round(windowMs / 3_600_000)}h`,
     `Total samples: ${recent.length} (failures: ${failures})`,
-    `Response time ms — mean: ${stats.mean}, stdDev: ${stats.stdDev}, min: ${stats.min}, max: ${stats.max}, p95: ${stats.p95}`,
+    `Response time ms | mean: ${stats.mean}, stdDev: ${stats.stdDev}, min: ${stats.min}, max: ${stats.max}, p95: ${stats.p95}`,
     '',
     'Slowest successful responses:',
     ...slowest.map(

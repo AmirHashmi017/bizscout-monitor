@@ -1,5 +1,7 @@
 import { computeCost } from './pricing';
 
+// Running LLM usage and cost totals for the dashboard (Option B requirement 4).
+// In memory, so totals reset on restart. Production would persist per day.
 export interface CostSnapshot {
   totalCalls: number;
   cachedHits: number;
@@ -37,4 +39,5 @@ class CostTracker {
   }
 }
 
+// Singleton shared across the LLM consuming modules.
 export const costTracker = new CostTracker();

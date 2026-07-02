@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// Body rules for POST /api/chat.
 export const chatBodySchema = z.object({
   question: z.string().min(1).max(1000),
 });

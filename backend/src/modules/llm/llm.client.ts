@@ -4,8 +4,16 @@ import { logger } from '../../utils/logger';
 import { RateLimiter } from './rate-limiter';
 import { costTracker } from './cost-tracker';
 
+// Gemini wrapper. Owns the shared cost guardrails (Option B requirement 4):
+//   - one rate limiter for every LLM feature,
+//   - usage and cost tracking,
+//   - a single enabled check.
+// Callers get a small surface and never touch the SDK directly.
+
+// Shared limiter across every LLM feature.
 export const rateLimiter = new RateLimiter(env.llm.maxCallsPerHour);
 
+// Null when no key is set, so the app runs fully without AI.
 const client: GoogleGenAI | null = env.llm.enabled
   ? new GoogleGenAI({ apiKey: env.llm.apiKey })
   : null;
@@ -22,12 +30,15 @@ export interface CompletionResult {
 
 export type BlockedReason = 'disabled' | 'rate_limited';
 
+// Tell callers why a call is blocked, or null when the call is allowed.
 export function checkAvailability(): BlockedReason | null {
   if (!client) return 'disabled';
   if (!rateLimiter.canProceed()) return 'rate_limited';
   return null;
 }
 
+// One shot completion. Uses one quota unit and records cost.
+// Throws when disabled or over quota, so callers check availability first.
 export async function complete(
   systemInstruction: string,
   userMessage: string,
@@ -42,7 +53,7 @@ export async function complete(
     config: {
       systemInstruction,
       maxOutputTokens,
-
+      // Disable thinking tokens for lower cost and latency.
       thinkingConfig: { thinkingBudget: 0 },
     },
   });

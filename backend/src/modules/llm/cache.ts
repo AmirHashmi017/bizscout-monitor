@@ -1,4 +1,6 @@
-
+// Small in memory TTL cache for LLM answers (Option B requirement 4).
+// Repeated questions skip the API and reuse a stored answer.
+// Single instance only. Redis would replace this at scale.
 interface Entry<T> {
   value: T;
   expiresAt: number;
@@ -32,6 +34,7 @@ export class TtlCache<T> {
   }
 }
 
+// Normalize a query so similar phrasings share one cache entry.
 export function cacheKey(query: string): string {
   return query.trim().toLowerCase().replace(/\s+/g, ' ');
 }

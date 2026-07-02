@@ -13,7 +13,7 @@ export interface IncidentAnalysis {
   title: string;
   rootCause: string;
   recommendations: string[];
-  generatedBy: string;
+  generatedBy: string; // "llm" or "rule-based"
 }
 
 const SYSTEM_PROMPT = `You are an SRE assistant analyzing HTTP monitoring anomalies.
@@ -23,6 +23,8 @@ Respond ONLY with minified JSON of shape:
 Keep rootCause under 60 words. Give 2-3 short, actionable recommendations.
 Do not wrap the JSON in markdown fences.`;
 
+// Deterministic fallback used when the LLM is off or rate limited.
+// Guarantees an incident always has a usable description.
 function ruleBasedAnalysis(input: IncidentInput): IncidentAnalysis {
   return {
     title: `Elevated response time on ${input.endpoint}`,
@@ -39,7 +41,7 @@ function ruleBasedAnalysis(input: IncidentInput): IncidentAnalysis {
   };
 }
 
-/** Strip accidental markdown code fences the model might add around JSON. */
+// Remove markdown code fences the model sometimes adds around JSON.
 function stripFences(text: string): string {
   return text
     .replace(/^```(?:json)?\s*/i, '')
@@ -47,10 +49,8 @@ function stripFences(text: string): string {
     .trim();
 }
 
-/**
- * Generate an incident analysis. Prefers the LLM; falls back to the rule-based
- * version on any failure so incident creation never breaks.
- */
+// Build the incident analysis. Prefer Gemini.
+// Fall back to the rule based version on any failure, so incident creation never breaks.
 export async function generateIncidentAnalysis(
   input: IncidentInput,
 ): Promise<IncidentAnalysis> {

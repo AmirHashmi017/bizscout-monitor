@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { chatHandler, costHandler } from './chat.controller';
 
+// Routes for /api/chat.
 export const chatRoutes = Router();
 
 chatRoutes.post('/', chatHandler);

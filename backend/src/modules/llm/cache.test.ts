@@ -1,5 +1,7 @@
 import { TtlCache, cacheKey } from './cache';
 
+// Core component tests: the LLM answer cache, the second cost guardrail.
+// Repeated questions must reuse a stored answer instead of calling the API.
 describe('TtlCache', () => {
   it('stores and retrieves a value', () => {
     const cache = new TtlCache<string>(1000);
@@ -15,8 +17,8 @@ describe('TtlCache', () => {
   it('expires entries after the TTL', () => {
     const cache = new TtlCache<string>(1000);
     cache.set('k', 'v', 0);
-    expect(cache.get('k', 999)).toBe('v');
-    expect(cache.get('k', 1000)).toBeUndefined();
+    expect(cache.get('k', 999)).toBe('v'); // still valid
+    expect(cache.get('k', 1000)).toBeUndefined(); // expired at the boundary
   });
 
   it('evicts expired entries from the store on read', () => {
