@@ -14,6 +14,8 @@ interface State {
 
 const MAX_ROWS = 100;
 
+// Load the first page over REST, then keep the list live via Socket.IO.
+// Tracks loading, error, and connection state for the UI.
 export function useLiveResponses() {
   const [state, setState] = useState<State>({
     items: [],

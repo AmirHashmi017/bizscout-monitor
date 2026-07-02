@@ -31,6 +31,8 @@ function Bar({ ms }: { ms: number }) {
  * Tabular view of monitoring responses (core requirement). Responsive: the
  * table scrolls horizontally on small screens rather than overflowing.
  */
+// Table of monitoring responses (core requirement).
+// Scrolls horizontally on small screens instead of overflowing.
 export function ResponseTable({ items }: { items: MonitorResponse[] }) {
   if (items.length === 0) {
     return (

@@ -11,6 +11,7 @@ import { CostBadge } from '@/components/CostBadge';
 
 type Tab = 'live' | 'incidents';
 
+// Dashboard page. Live data and incidents tabs, plus the AI chat panel.
 export default function Dashboard() {
   const { items, loading, error, connected, reload } = useLiveResponses();
   const [tab, setTab] = useState<Tab>('live');

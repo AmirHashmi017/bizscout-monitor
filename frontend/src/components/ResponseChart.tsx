@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import type { MonitorResponse } from '@/lib/types';
 
+// Response time area with anomaly markers. Presentational only.
 export function ResponseChart({ items }: { items: MonitorResponse[] }) {
   const data = [...items].reverse().map((r) => ({
     time: new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),

@@ -13,6 +13,8 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+// LLM cost and quota badge (Option B requirement 4).
+// Polls the cost endpoint since spend changes on server side calls.
 export function CostBadge({ refreshKey }: { refreshKey: number }) {
   const [cost, setCost] = useState<CostSnapshot | null>(null);
 

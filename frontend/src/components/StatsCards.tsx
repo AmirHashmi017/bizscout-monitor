@@ -31,6 +31,7 @@ function Card({ label, value, sub, accent, icon }: CardProps) {
  * Summary metric cards. Refreshes on each new live response so the numbers stay
  * current without a manual reload.
  */
+// Summary metric cards. Refreshes on each new live response.
 export function StatsCards({ latest }: { latest: MonitorResponse[] }) {
   const [stats, setStats] = useState<RollingStats | null>(null);
 

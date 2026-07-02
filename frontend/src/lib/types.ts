@@ -1,5 +1,6 @@
 
 
+// Shared types mirroring the backend API responses.
 export interface MonitorResponse {
   _id: string;
   timestamp: string;

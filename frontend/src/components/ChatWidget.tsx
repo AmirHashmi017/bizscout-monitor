@@ -15,6 +15,9 @@ const SUGGESTIONS = [
   'How many anomalies occurred recently?',
 ];
 
+// Natural language chat widget (Option B requirement 1).
+// Handles loading and error states, and signals the parent after each call so
+// the cost badge refreshes.
 export function ChatWidget({ onCall }: { onCall: () => void }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');

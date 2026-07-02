@@ -11,6 +11,8 @@ const severityStyle: Record<Incident['severity'], string> = {
   high: 'bg-rose-500/15 text-rose-300 ring-rose-500/20',
 };
 
+// Incidents tab (Option B requirement 2).
+// REST history plus live incidents pushed over Socket.IO.
 export function IncidentsTab() {
   const [items, setItems] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
