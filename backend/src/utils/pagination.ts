@@ -1,4 +1,4 @@
-
+// Shared pagination shape and builder used by the list endpoints.
 export interface Pagination {
   page: number;
   limit: number;
