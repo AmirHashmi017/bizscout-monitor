@@ -1,4 +1,5 @@
 
+// Jest config: ts-jest, serial runs, coverage collected from src.
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',

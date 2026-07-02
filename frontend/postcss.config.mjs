@@ -1,4 +1,5 @@
 
+// PostCSS config: Tailwind and autoprefixer.
 const config = {
   plugins: {
     tailwindcss: {},
