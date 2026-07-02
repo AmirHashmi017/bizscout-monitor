@@ -8,19 +8,16 @@ interface CardProps {
   label: string;
   value: string;
   sub?: string;
-  accent: string;
-  icon: React.ReactNode;
+  dot: string;
 }
 
-function Card({ label, value, sub, accent, icon }: CardProps) {
+function Card({ label, value, sub, dot }: CardProps) {
   return (
-    <div className="glass group animate-in min-w-0 p-4 transition-transform hover:-translate-y-0.5">
-      <div className="flex items-start justify-between gap-2">
+    <div className="glass min-w-0 p-4 transition-transform hover:-translate-y-0.5">
+      <div className="flex items-center gap-2">
+        <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dot}`} />
         <span className="truncate text-[11px] font-medium uppercase tracking-wider text-slate-400">
           {label}
-        </span>
-        <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg ${accent}`}>
-          {icon}
         </span>
       </div>
       <div className="mt-2 truncate text-xl font-semibold tracking-tight text-white sm:text-2xl">
@@ -50,29 +47,25 @@ export function StatsCards({ latest }: { latest: MonitorResponse[] }) {
         label="Mean latency"
         value={stats ? `${stats.mean} ms` : '-'}
         sub={`p95 ${stats?.p95 ?? '-'} ms`}
-        accent="bg-sky-500/15 text-sky-300"
-        icon={<span className="text-sm">⚡</span>}
+        dot="bg-sky-400"
       />
       <Card
         label="Std deviation"
         value={stats ? `${stats.stdDev} ms` : '-'}
         sub="24h window"
-        accent="bg-violet-500/15 text-violet-300"
-        icon={<span className="text-sm">📊</span>}
+        dot="bg-violet-400"
       />
       <Card
         label="Samples"
         value={stats ? String(stats.count) : '-'}
         sub={`max ${stats?.max ?? '-'} ms`}
-        accent="bg-emerald-500/15 text-emerald-300"
-        icon={<span className="text-sm">🎯</span>}
+        dot="bg-emerald-400"
       />
       <Card
         label="Anomalies"
         value={String(anomalies)}
         sub="in current view"
-        accent="bg-rose-500/15 text-rose-300"
-        icon={<span className="text-sm">🚨</span>}
+        dot="bg-rose-400"
       />
     </div>
   );

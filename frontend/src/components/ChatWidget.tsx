@@ -49,14 +49,9 @@ export function ChatWidget({ onCall }: { onCall: () => void }) {
 
   return (
     <div className="glass flex h-full min-h-[420px] flex-col">
-      <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
-        <span className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-to-br from-sky-500/30 to-violet-500/30 text-sm">
-          ✨
-        </span>
-        <div>
-          <div className="text-sm font-medium text-white">Ask the data</div>
-          <div className="text-[11px] text-slate-500">Powered by Gemini · grounded in your metrics</div>
-        </div>
+      <div className="border-b border-white/10 px-4 py-3">
+        <div className="text-sm font-medium text-white">Assistant</div>
+        <div className="text-[11px] text-slate-500">Answers from your monitoring data</div>
       </div>
 
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">

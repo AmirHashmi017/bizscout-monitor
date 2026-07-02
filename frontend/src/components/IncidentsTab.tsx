@@ -49,9 +49,8 @@ export function IncidentsTab() {
     );
   if (items.length === 0)
     return (
-      <div className="glass grid place-items-center gap-1 p-10 text-center">
-        <span className="text-3xl">✅</span>
-        <span className="text-sm text-slate-400">No incidents detected. All systems nominal.</span>
+      <div className="glass grid place-items-center p-10 text-center text-sm text-slate-400">
+        No incidents detected. All systems nominal.
       </div>
     );
 

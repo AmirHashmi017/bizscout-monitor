@@ -13,7 +13,7 @@ type Tab = 'live' | 'incidents';
 
 // Dashboard page. Live data and incidents tabs, plus the AI chat panel.
 export default function Dashboard() {
-  const { items, loading, error, connected, reload } = useLiveResponses();
+  const { items, loading, error, reload } = useLiveResponses();
   const [tab, setTab] = useState<Tab>('live');
   const [costRefresh, setCostRefresh] = useState(0);
 
@@ -21,8 +21,18 @@ export default function Dashboard() {
     <main className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8">
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-sky-500 to-violet-600 text-base shadow-lg shadow-sky-500/20 sm:h-11 sm:w-11 sm:text-lg">
-            📡
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-sky-500 to-violet-600 shadow-lg shadow-sky-500/20 sm:h-11 sm:w-11">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5 text-white"
+            >
+              <path d="M3 12h4l2 6 4-14 2 8h6" />
+            </svg>
           </span>
           <div className="min-w-0">
             <h1 className="truncate text-lg font-bold tracking-tight text-white sm:text-xl">
@@ -32,16 +42,6 @@ export default function Dashboard() {
               Live HTTP monitoring of httpbin.org · pings every 5 min
             </p>
           </div>
-        </div>
-        <div className="glass flex items-center gap-2 px-3 py-1.5 text-xs">
-          <span
-            className={`h-2 w-2 rounded-full ${
-              connected ? 'live-dot bg-emerald-400' : 'bg-slate-600'
-            }`}
-          />
-          <span className={connected ? 'text-emerald-300' : 'text-slate-400'}>
-            {connected ? 'Live' : 'Disconnected'}
-          </span>
         </div>
       </header>
 
@@ -100,10 +100,6 @@ export default function Dashboard() {
           </div>
         </aside>
       </div>
-
-      <footer className="mt-10 text-center text-xs text-slate-600">
-        BizScout Monitor · TypeScript + Express · Next.js · MongoDB · Gemini
-      </footer>
     </main>
   );
 }
