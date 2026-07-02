@@ -4,6 +4,14 @@ import { connectDatabase, disconnectDatabase } from '../../config/database';
 import { ResponseModel } from './response.model';
 import { createApp } from '../../app';
 
+// Integration test for the history API (core requirement 5).
+// Runs the real Express app plus Mongoose against a real MongoDB, so it covers
+// routing, query validation, pagination, and the DB layer together.
+//
+// Connects to MONGO_TEST_URI, a disposable test database. In CI this points at a
+// mongo:7 service container. Locally, point it at a local mongod or an Atlas test
+// database. The test uses its own DB name and cleans up, so it never touches
+// production data.
 const TEST_URI =
   process.env.MONGO_TEST_URI ?? 'mongodb://127.0.0.1:27017/bizscout_test';
 
@@ -14,6 +22,7 @@ describe('GET /api/responses', () => {
     await connectDatabase(TEST_URI);
     await ResponseModel.deleteMany({});
 
+    // Seed 25 samples. Every fifth one is an anomaly.
     const docs = Array.from({ length: 25 }, (_, i) => ({
       timestamp: new Date(Date.now() - i * 60_000),
       url: 'https://httpbin.org/anything',
