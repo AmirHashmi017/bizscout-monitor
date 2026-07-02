@@ -48,22 +48,22 @@ export function StatsCards({ latest }: { latest: MonitorResponse[] }) {
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       <Card
         label="Mean latency"
-        value={stats ? `${stats.mean} ms` : '—'}
-        sub={`p95 ${stats?.p95 ?? '—'} ms`}
+        value={stats ? `${stats.mean} ms` : '-'}
+        sub={`p95 ${stats?.p95 ?? '-'} ms`}
         accent="bg-sky-500/15 text-sky-300"
         icon={<span className="text-sm">⚡</span>}
       />
       <Card
         label="Std deviation"
-        value={stats ? `${stats.stdDev} ms` : '—'}
+        value={stats ? `${stats.stdDev} ms` : '-'}
         sub="24h window"
         accent="bg-violet-500/15 text-violet-300"
         icon={<span className="text-sm">📊</span>}
       />
       <Card
         label="Samples"
-        value={stats ? String(stats.count) : '—'}
-        sub={`max ${stats?.max ?? '—'} ms`}
+        value={stats ? String(stats.count) : '-'}
+        sub={`max ${stats?.max ?? '-'} ms`}
         accent="bg-emerald-500/15 text-emerald-300"
         icon={<span className="text-sm">🎯</span>}
       />

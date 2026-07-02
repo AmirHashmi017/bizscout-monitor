@@ -91,7 +91,7 @@ export default function Dashboard() {
           )}
         </section>
 
-        {/* Chat column — sticky on desktop */}
+        {/* Chat column, sticky on desktop */}
         <aside className="lg:col-span-1">
           <div className="lg:sticky lg:top-6">
             <ChatWidget onCall={() => setCostRefresh((n) => n + 1)} />
