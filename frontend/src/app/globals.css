@@ -14,6 +14,12 @@ body {
     radial-gradient(900px 500px at 100% 0%, rgba(168, 85, 247, 0.1), transparent 55%),
     #060a15;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .glass {

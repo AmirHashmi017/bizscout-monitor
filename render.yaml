@@ -1,25 +1,24 @@
 # Render Blueprint for the backend service.
-# The frontend deploys separately to Vercel (see README → Deployment).
+# The frontend deploys separately to Vercel (see the README Deployment section).
 services:
   - type: web
     name: bizscout-monitor-backend
     runtime: node
     rootDir: backend
     plan: free
-    buildCommand: npm ci && npm run build
+    # Install dev dependencies too, since the TypeScript build needs tsc.
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 4000
       - key: MONGODB_URI
         sync: false # set in the Render dashboard (MongoDB Atlas connection string)
       - key: CORS_ORIGINS
-        sync: false # set to your Vercel frontend URL, e.g. https://your-app.vercel.app
+        sync: false # set to your Vercel frontend URL, for example https://your-app.vercel.app
       - key: GEMINI_API_KEY
-        sync: false # optional — enables LLM features
+        sync: false # optional, enables the LLM features
       - key: LLM_MODEL
         value: gemini-2.5-flash
       - key: MONITOR_INTERVAL_MS

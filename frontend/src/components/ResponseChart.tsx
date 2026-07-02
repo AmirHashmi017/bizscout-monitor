@@ -33,7 +33,7 @@ export function ResponseChart({ items }: { items: MonitorResponse[] }) {
           </span>
         </div>
       </div>
-      <div className="h-60 w-full">
+      <div className="h-60 w-full min-w-0">
         {data.length === 0 ? (
           <div className="grid h-full place-items-center text-sm text-slate-500">
             Waiting for data…

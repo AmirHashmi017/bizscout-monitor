@@ -14,23 +14,23 @@ interface CardProps {
 
 function Card({ label, value, sub, accent, icon }: CardProps) {
   return (
-    <div className="glass group animate-in p-4 transition-transform hover:-translate-y-0.5">
-      <div className="flex items-start justify-between">
-        <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
+    <div className="glass group animate-in min-w-0 p-4 transition-transform hover:-translate-y-0.5">
+      <div className="flex items-start justify-between gap-2">
+        <span className="truncate text-[11px] font-medium uppercase tracking-wider text-slate-400">
           {label}
         </span>
-        <span className={`grid h-8 w-8 place-items-center rounded-lg ${accent}`}>{icon}</span>
+        <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg ${accent}`}>
+          {icon}
+        </span>
       </div>
-      <div className="mt-2 text-2xl font-semibold tracking-tight text-white">{value}</div>
-      {sub && <div className="text-xs text-slate-500">{sub}</div>}
+      <div className="mt-2 truncate text-xl font-semibold tracking-tight text-white sm:text-2xl">
+        {value}
+      </div>
+      {sub && <div className="truncate text-xs text-slate-500">{sub}</div>}
     </div>
   );
 }
 
-/**
- * Summary metric cards. Refreshes on each new live response so the numbers stay
- * current without a manual reload.
- */
 // Summary metric cards. Refreshes on each new live response.
 export function StatsCards({ latest }: { latest: MonitorResponse[] }) {
   const [stats, setStats] = useState<RollingStats | null>(null);

@@ -18,15 +18,17 @@ export default function Dashboard() {
   const [costRefresh, setCostRefresh] = useState(0);
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-sky-500 to-violet-600 text-lg shadow-lg shadow-sky-500/20">
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-sky-500 to-violet-600 text-base shadow-lg shadow-sky-500/20 sm:h-11 sm:w-11 sm:text-lg">
             📡
           </span>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-white">BizScout Monitor</h1>
-            <p className="text-sm text-slate-400">
+          <div className="min-w-0">
+            <h1 className="truncate text-lg font-bold tracking-tight text-white sm:text-xl">
+              BizScout Monitor
+            </h1>
+            <p className="truncate text-xs text-slate-400 sm:text-sm">
               Live HTTP monitoring of httpbin.org · pings every 5 min
             </p>
           </div>
@@ -49,7 +51,7 @@ export default function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main column */}
-        <section className="space-y-5 lg:col-span-2">
+        <section className="min-w-0 space-y-5 lg:col-span-2">
           <StatsCards latest={items} />
 
           {/* Tabs */}
@@ -92,7 +94,7 @@ export default function Dashboard() {
         </section>
 
         {/* Chat column, sticky on desktop */}
-        <aside className="lg:col-span-1">
+        <aside className="min-w-0 lg:col-span-1">
           <div className="lg:sticky lg:top-6">
             <ChatWidget onCall={() => setCostRefresh((n) => n + 1)} />
           </div>
