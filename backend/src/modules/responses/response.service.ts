@@ -4,10 +4,12 @@ import { getRollingStats, RollingStats } from '../monitoring/stats.service';
 import type { ListResponsesQuery } from './response.validation';
 import type { ResponseListDto } from './response.dto';
 
+// Read logic for monitoring history. No Express here, so the logic stays testable.
 export async function listResponses(query: ListResponsesQuery): Promise<ResponseListDto> {
   const { page, limit, anomaliesOnly } = query;
   const filter = anomaliesOnly ? { isAnomaly: true } : {};
 
+  // Fetch the page and the total count in parallel.
   const [items, total] = await Promise.all([
     ResponseModel.find(filter)
       .sort({ timestamp: -1 })

@@ -9,6 +9,8 @@ import { responseRoutes } from './modules/responses/response.routes';
 import { incidentRoutes } from './modules/incidents/incident.routes';
 import { chatRoutes } from './modules/chat/chat.routes';
 
+// Build the Express app. Kept apart from server startup so tests import the app
+// through supertest without opening a port or a DB connection.
 export function createApp(): Application {
   const app = express();
 
@@ -23,6 +25,7 @@ export function createApp(): Application {
     res.json({ status: 'ok', uptime: process.uptime() });
   });
 
+  // Feature module routers.
   app.use('/api/responses', responseRoutes);
   app.use('/api/incidents', incidentRoutes);
   app.use('/api/chat', chatRoutes);

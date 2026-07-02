@@ -6,6 +6,8 @@ import { createApp } from './app';
 import { initSockets } from './sockets/socket.service';
 import { startScheduler, stopScheduler } from './modules/monitoring/scheduler';
 
+// Startup. Connect the DB, start HTTP and Socket.IO, then start the scheduler.
+// Ordered so the scheduler runs only after the DB is ready.
 async function main(): Promise<void> {
   await connectDatabase();
 
@@ -18,6 +20,7 @@ async function main(): Promise<void> {
     startScheduler();
   });
 
+  // Graceful shutdown on process signals.
   const shutdown = async (signal: string): Promise<void> => {
     logger.info({ signal }, 'Shutting down');
     stopScheduler();

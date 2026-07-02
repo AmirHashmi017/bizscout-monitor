@@ -7,6 +7,7 @@ const listQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
 });
 
+// GET /api/incidents. Paginated incident reports for the Incidents tab.
 export async function listIncidentsHandler(req: Request, res: Response): Promise<Response> {
   const parsed = listQuerySchema.safeParse(req.query);
   if (!parsed.success) {

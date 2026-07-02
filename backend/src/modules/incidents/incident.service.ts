@@ -6,12 +6,15 @@ import { eventBus } from '../../utils/event-bus';
 import { logger } from '../../utils/logger';
 import { buildPagination } from '../../utils/pagination';
 
+// Map the overshoot ratio to a severity level.
 export function classifySeverity(ratio: number): IncidentSeverity {
   if (ratio >= 4) return 'high';
   if (ratio >= 3) return 'medium';
   return 'low';
 }
 
+// Create an incident for an abnormal response (Option B requirement 2).
+// The analyzer returns a rule based fallback on failure, so an incident always lands.
 export async function createIncident(
   response: ResponseDocument,
   stats: RollingStats,
@@ -48,6 +51,7 @@ export async function createIncident(
   eventBus.emit('incident:new', incident);
 }
 
+// Paginated incident history for the Incidents tab.
 export async function listIncidents(page: number, limit: number) {
   const [items, total] = await Promise.all([
     IncidentModel.find()

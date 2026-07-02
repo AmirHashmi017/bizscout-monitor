@@ -1,5 +1,6 @@
 import type { Pagination } from '../../utils/pagination';
 
+// API response shapes for the responses endpoints.
 export interface ResponseDto {
   _id: string;
   timestamp: string;
